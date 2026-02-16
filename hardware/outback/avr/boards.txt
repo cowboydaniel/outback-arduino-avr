@@ -16,5 +16,5 @@ multiduino.build.mcu=atmega328p
 multiduino.build.f_cpu=16000000L
 multiduino.build.board=AVR_MULTIDUINO
 multiduino.build.core=arduino:arduino
-multiduino.build.variant=arduino:standard
+multiduino.build.variant=multiduino
 multiduino.build.extra_flags=
