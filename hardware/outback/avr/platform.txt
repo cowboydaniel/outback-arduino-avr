@@ -3,7 +3,7 @@
 #
 # For more info:
 # https://arduino.github.io/arduino-cli/latest/platform-specification/
-name=Multiduino AVR Boards
+name=Outback AVR Boards
 version=1.0.0
 # AVR compile variables
 # ---------------------
