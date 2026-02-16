@@ -13,8 +13,26 @@
 // ---- SPI ----
 #define HAVE_SPI        1
 
+// ---- Onboard micro SD card ----
+// Connected on the hardware SPI bus. CS is wired permanently to D10 (PB2 / SS).
+// Consequence: D10 PWM (Timer1B) is unavailable; do not drive D10 as PWM output.
+// Use the SD or SdFat library with SD_CS_PIN as the chip-select.
+#define HAVE_SD_CARD    1
+#define SD_CS_PIN       10      // PB2, hardware SS
+
 // ---- I2C / TWI ----
 #define HAVE_WIRE       1
+
+// ---- Onboard DS1307 RTC + 56-byte NVRAM ----
+// Communicates via I2C (SDA = A4/D18, SCL = A5/D19).
+// I2C address: 0x68 (fixed, not configurable).
+// The DS1307 also exposes 56 bytes of battery-backed NVRAM at registers 0x08–0x3F.
+// SQW/OUT pin is not connected on this board.
+// Recommended library: RTClib (Adafruit) or DS1307RTC.
+#define HAVE_RTC_DS1307 1
+#define HAVE_RTC_NVRAM  1
+#define RTC_NVRAM_SIZE  56      // bytes, registers 0x08-0x3F
+#define RTC_I2C_ADDR    0x68
 
 // ---- Timers ----
 // Timer0: 8-bit, used by millis()/micros()
