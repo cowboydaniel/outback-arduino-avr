@@ -1,0 +1,7 @@
+# Copy the Arduino AVR core files here if you want a custom core.
+# Source: https://github.com/arduino/ArduinoCore-avr/tree/master/cores/arduino
+#
+# Then update boards.txt:
+#   multiduino.build.core=arduino          (local cores/arduino/)
+# instead of:
+#   multiduino.build.core=arduino:arduino  (bundled Arduino core)

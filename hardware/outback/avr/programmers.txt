@@ -1,0 +1,32 @@
+avrispmkii.name=AVR ISP mkII
+avrispmkii.communication=usb
+avrispmkii.protocol=stk500v2
+avrispmkii.program.protocol=stk500v2
+avrispmkii.program.tool=avrdude
+avrispmkii.program.extra_params=-Pusb
+
+usbtinyisp.name=USBtinyISP
+usbtinyisp.communication=usb
+usbtinyisp.protocol=usbtiny
+usbtinyisp.program.tool=avrdude
+usbtinyisp.program.extra_params=
+
+usbasp.name=USBasp
+usbasp.communication=usb
+usbasp.protocol=usbasp
+usbasp.program.tool=avrdude
+usbasp.program.extra_params=-Pusb
+
+arduinoisp.name=Arduino as ISP
+arduinoisp.communication=serial
+arduinoisp.protocol=stk500v1
+arduinoisp.speed=19200
+arduinoisp.program.tool=avrdude
+arduinoisp.program.extra_params=-P{serial.port}
+
+arduinoisporg.name=Arduino as ISP (ATmega32U4)
+arduinoisporg.communication=serial
+arduinoisporg.protocol=stk500v1
+arduinoisporg.speed=19200
+arduinoisporg.program.tool=avrdude
+arduinoisporg.program.extra_params=-P{serial.port}
