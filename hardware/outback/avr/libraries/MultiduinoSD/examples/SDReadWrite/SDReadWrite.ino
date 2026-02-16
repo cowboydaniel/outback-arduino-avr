@@ -1,62 +1,80 @@
 /*
- * SDReadWrite — Multiduino example
- *
- * Creates a file on the SD card, appends a line to it on every boot,
- * then reads back the entire file and prints it to Serial.
- *
- * Hardware: Multiduino (micro SD on SPI, CS = D10)
- * Library : MultiduinoSD (depends on Arduino SD library)
- */
+  SDReadWrite
+  -----------
+  Basic SD card read/write example using the custom MultiduinoSD library.
+
+  Demonstrates:
+    - Initialising the SD card with MultiduinoSD.begin()
+    - Printing card type, FAT type, and capacity
+    - Writing text to a file (append mode creates if missing)
+    - Reading the file back and printing to Serial
+    - Listing the root directory
+
+  "LOG.TXT" is created on first run and appended on each subsequent reset.
+  Open Serial Monitor at 115200 baud.
+
+  Hardware: Multiduino (ATmega328P), SD card on SPI (CS = D10).
+  Library : MultiduinoSD v2 – custom FAT16/FAT32, no Arduino SD dependency.
+*/
 
 #include <MultiduinoSD.h>
 
-static const char FILENAME[] = "log.txt";
+static const char FILENAME[] = "LOG.TXT";
 
 void setup() {
     Serial.begin(115200);
-    while (!Serial);
+    while (!Serial) {}
 
-    Serial.println(F("Initialising SD card..."));
+    Serial.println(F("=== SD Read/Write ==="));
+    Serial.println();
+
+    // ---- Initialise SD ---------------------------------------------------
+    Serial.print(F("Initialising SD card... "));
     if (!MultiduinoSD.begin()) {
-        Serial.println(F("ERROR: SD card not found or init failed."));
-        Serial.println(F("  • Check card is seated correctly."));
-        Serial.println(F("  • Check card is formatted FAT16 or FAT32."));
-        while (true);
+        Serial.println(F("FAILED."));
+        Serial.println(F("  Check card is inserted and formatted FAT16/FAT32."));
+        while (true) {}
     }
-    Serial.println(F("SD ready.\n"));
+    Serial.println(F("OK"));
     MultiduinoSD.printCardInfo(Serial);
     Serial.println();
 
-    // --- Append a line ---
-    File f = MultiduinoSD.open(FILENAME, FILE_WRITE);
+    // ---- Append a line ---------------------------------------------------
+    SDFile f = MultiduinoSD.open(FILENAME, FILE_WRITE);
     if (f) {
-        f.println(F("Hello from Multiduino!"));
+        f.println("Hello from Multiduino!");
+        f.flush();
         f.close();
-        Serial.print(F("Appended a line to "));
-        Serial.println(FILENAME);
+        Serial.print(F("Appended a line to ")); Serial.println(FILENAME);
     } else {
-        Serial.print(F("ERROR: could not open "));
-        Serial.println(FILENAME);
+        Serial.print(F("ERROR: could not open ")); Serial.println(FILENAME);
     }
 
-    // --- Read the whole file back ---
-    Serial.println(F("\n--- File contents ---"));
+    // ---- Read the whole file back ----------------------------------------
+    Serial.println();
+    Serial.println(F("--- File contents ---"));
     f = MultiduinoSD.open(FILENAME, FILE_READ);
     if (f) {
-        while (f.available()) {
-            Serial.write(f.read());
+        while (f.position() < f.size()) {
+            int c = f.read();
+            if (c < 0) break;
+            Serial.write((char)c);
         }
         f.close();
     } else {
         Serial.println(F("ERROR: could not open file for reading."));
     }
-    Serial.println(F("--- End of file ---\n"));
+    Serial.println(F("--- End of file ---"));
+    Serial.println();
 
-    // --- Directory listing ---
+    // ---- Directory listing -----------------------------------------------
     Serial.println(F("Root directory:"));
     MultiduinoSD.ls("/", Serial);
+    Serial.println();
+
+    Serial.println(F("Done."));
 }
 
 void loop() {
-    // Nothing.
+    // Nothing – all work done in setup()
 }
