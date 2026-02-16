@@ -14,10 +14,10 @@
           "architecture": "avr",
           "version": "1.0.0",
           "category": "Contributed",
-          "url": "https://github.com/cowboydaniel/outback-arduino-avr/releases/download/1.0.0/outback-avr-1.0.0.tar.gz",
+          "url": "https://raw.githubusercontent.com/cowboydaniel/outback-arduino-avr/main/outback-avr-1.0.0.tar.gz",
           "archiveFileName": "outback-avr-1.0.0.tar.gz",
-          "checksum": "SHA-256:632818c5bcac4ee095206141a5d3678b752ebc8e710f27b9f00ba2d5e566292e",
-          "size": "12437",
+          "checksum": "SHA-256:022b16597d9e177effccc74741c0069bd7326252570815406f3b31ac76c8bed3",
+          "size": "12088",
           "boards": [
             { "name": "Multiduino" }
           ],
