@@ -3,13 +3,21 @@
 
 #include <avr/pgmspace.h>
 
-// Multiduino - ATmega328P, 16MHz, standard Arduino Uno pinout
+// Multiduino - ATmega328P, 16MHz
+//
+// Onboard peripherals and their pin reservations:
+//   micro SD card : SPI bus (D10 CS, D11 MOSI, D12 MISO, D13 SCK)
+//                   D10 is permanently driven as CS — PWM on D10 (Timer1B) is unavailable.
+//   DS1307 RTC    : I2C bus (A4/D18 SDA, A5/D19 SCL), address 0x68
+//                   Includes 56 bytes of battery-backed NVRAM (reg 0x08–0x3F).
+//                   SQW/INT output is not connected.
 
 #define NUM_DIGITAL_PINS            20
 #define NUM_ANALOG_INPUTS           6
 #define analogInputToDigitalPin(p)  ((p < 6) ? (p) + 14 : -1)
 
-#define digitalPinHasPWM(p)         ((p) == 3 || (p) == 5 || (p) == 6 || (p) == 9 || (p) == 10 || (p) == 11)
+// D10 (Timer1B) is reserved as SD card CS and must not be used as PWM output.
+#define digitalPinHasPWM(p)         ((p) == 3 || (p) == 5 || (p) == 6 || (p) == 9 || (p) == 11)
 
 #define PIN_SPI_SS    (10)
 #define PIN_SPI_MOSI  (11)
@@ -26,6 +34,17 @@ static const uint8_t SCK  = PIN_SPI_SCK;
 
 static const uint8_t SDA = PIN_WIRE_SDA;
 static const uint8_t SCL = PIN_WIRE_SCL;
+
+// Onboard micro SD card (SPI)
+// MOSI/MISO/SCK share the hardware SPI bus with any other SPI devices.
+// CS is wired to D10; PWM (Timer1B) on D10 is therefore unavailable.
+#define PIN_SD_CS     (10)
+static const uint8_t SD_CS = PIN_SD_CS;
+
+// Onboard DS1307 RTC / NVRAM (I2C, address 0x68)
+// A4 and A5 are dedicated to I2C on this board; avoid using them as GPIO.
+#define PIN_RTC_SDA   PIN_WIRE_SDA   // A4 / D18
+#define PIN_RTC_SCL   PIN_WIRE_SCL   // A5 / D19
 
 #define LED_BUILTIN 13
 
@@ -158,7 +177,7 @@ const uint8_t PROGMEM digital_pin_to_timer_PGM[] = {
     NOT_ON_TIMER,
     NOT_ON_TIMER, /* 8 - port B */
     TIMER1A,      /* 9 */
-    TIMER1B,      /* 10 */
+    NOT_ON_TIMER, /* 10 - SD card CS, Timer1B unavailable */
     TIMER2A,      /* 11 */
     NOT_ON_TIMER,
     NOT_ON_TIMER,
