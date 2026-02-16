@@ -1,0 +1,52 @@
+#######################################
+# Syntax Coloring Map – MultiduinoSD
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+MultiduinoSDClass	KEYWORD1
+MultiduinoSD	KEYWORD1
+SDFile	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+begin	KEYWORD2
+ready	KEYWORD2
+printCardInfo	KEYWORD2
+open	KEYWORD2
+exists	KEYWORD2
+remove	KEYWORD2
+mkdir	KEYWORD2
+rmdir	KEYWORD2
+ls	KEYWORD2
+cardType	KEYWORD2
+capacityMB	KEYWORD2
+fatType	KEYWORD2
+read	KEYWORD2
+write	KEYWORD2
+flush	KEYWORD2
+seek	KEYWORD2
+position	KEYWORD2
+size	KEYWORD2
+isDirectory	KEYWORD2
+name	KEYWORD2
+printName	KEYWORD2
+openNextFile	KEYWORD2
+rewindDirectory	KEYWORD2
+close	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+SD_CS_PIN	LITERAL1
+SD_MAX_OPEN_FILES	LITERAL1
+SD_SECTOR_SIZE	LITERAL1
+SD_O_READ	LITERAL1
+SD_O_WRITE	LITERAL1
+SD_O_CREAT	LITERAL1
+SD_O_APPEND	LITERAL1
+SD_O_TRUNC	LITERAL1
+FILE_READ	LITERAL1
+FILE_WRITE	LITERAL1

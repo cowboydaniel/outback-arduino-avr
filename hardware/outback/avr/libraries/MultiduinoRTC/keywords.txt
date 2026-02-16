@@ -1,0 +1,39 @@
+#######################################
+# Syntax Coloring Map – MultiduinoRTC
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+MultiduinoRTCClass	KEYWORD1
+MultiduinoRTC	KEYWORD1
+DateTime	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+begin	KEYWORD2
+isRunning	KEYWORD2
+start	KEYWORD2
+stop	KEYWORD2
+now	KEYWORD2
+adjust	KEYWORD2
+readNVRAM	KEYWORD2
+writeNVRAM	KEYWORD2
+clearNVRAM	KEYWORD2
+toString	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+DS1307_ADDR	LITERAL1
+DS1307_NVRAM_SIZE	LITERAL1
+DS1307_REG_SEC	LITERAL1
+DS1307_REG_MIN	LITERAL1
+DS1307_REG_HOUR	LITERAL1
+DS1307_REG_DOW	LITERAL1
+DS1307_REG_DATE	LITERAL1
+DS1307_REG_MON	LITERAL1
+DS1307_REG_YEAR	LITERAL1
+DS1307_REG_CTRL	LITERAL1
+DS1307_REG_NVRAM	LITERAL1

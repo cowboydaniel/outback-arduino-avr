@@ -1,0 +1,33 @@
+#######################################
+# Syntax Coloring Map – MultiduinoNVRAM
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+MultiduinoNVRAMClass	KEYWORD1
+NVRAM	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+write	KEYWORD2
+read	KEYWORD2
+put	KEYWORD2
+get	KEYWORD2
+putString	KEYWORD2
+getString	KEYWORD2
+writeBlock	KEYWORD2
+readBlock	KEYWORD2
+clear	KEYWORD2
+fill	KEYWORD2
+crc8	KEYWORD2
+writeMagic	KEYWORD2
+checkMagic	KEYWORD2
+dump	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+NVRAM_SIZE	LITERAL1
+NVRAM_CRC_POLY	LITERAL1
