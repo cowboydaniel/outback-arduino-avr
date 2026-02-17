@@ -60,12 +60,9 @@ public:
     // -----------------------------------------------------------------------
 
     // Write a null-terminated C string starting at addr.
-    // Writes at most (NVRAM_SIZE - addr) bytes including the terminator.
-    // The string is always null-terminated in NVRAM.
     void putString(uint8_t addr, const char* str);
 
     // Read a null-terminated C string from addr into buf (capacity maxLen).
-    // buf is always null-terminated on return.
     void getString(uint8_t addr, char* buf, uint8_t maxLen);
 
     // -----------------------------------------------------------------------
@@ -85,25 +82,46 @@ public:
     // Zero all 56 NVRAM bytes.
     void clear();
 
-    // Fill all 56 NVRAM bytes with the given fill value.
+    // Fill all 56 NVRAM bytes with value.
     void fill(uint8_t value);
+
+    // Fill a sub-range [addr, addr+len) with value.
+    // Silently clamps to NVRAM_SIZE.
+    void fill(uint8_t addr, uint8_t len, uint8_t value);
+
+    // -----------------------------------------------------------------------
+    // Compare
+    // -----------------------------------------------------------------------
+
+    // Returns true when the len NVRAM bytes starting at addr exactly match buf.
+    bool compare(uint8_t addr, const uint8_t* buf, uint8_t len);
+
+    // -----------------------------------------------------------------------
+    // Layout / version tagging
+    // -----------------------------------------------------------------------
+    //
+    // Write a 1-byte version number to addr and a CRC of it to addr+1.
+    // checkLayout() returns true only when both bytes still match.
+    // Useful for detecting a first-boot (un-initialised NVRAM) or an
+    // application upgrade that changed the NVRAM map.
+    //
+    // Consumes 2 bytes at addr.
+
+    void    writeLayout(uint8_t addr, uint8_t version);
+    uint8_t readLayout (uint8_t addr);
+    bool    checkLayout(uint8_t addr, uint8_t version);
 
     // -----------------------------------------------------------------------
     // Integrity helpers
     // -----------------------------------------------------------------------
 
     // Compute CRC-8 (CCITT, poly 0x07) over len bytes starting at addr.
-    // Useful for detecting NVRAM corruption across power cycles.
     uint8_t crc8(uint8_t addr, uint8_t len);
 
     // Write a one-byte "magic marker" to addr and its CRC to addr+1.
-    // Use checkMagic() on next boot to verify NVRAM has not been corrupted
-    // or cleared since the marker was written.
     void writeMagic(uint8_t addr, uint8_t magic);
 
-    // Returns true if the byte at addr equals magic AND addr+1 contains the
-    // expected CRC of that magic byte.  Returns false after a clear(), a
-    // battery swap, or if the marker was never written.
+    // Returns true if addr == magic and addr+1 contains the expected CRC.
     bool checkMagic(uint8_t addr, uint8_t magic);
 
     // -----------------------------------------------------------------------
@@ -112,6 +130,33 @@ public:
 
     // Print a formatted hex + ASCII dump of all 56 NVRAM bytes to 'out'.
     void dump(Print& out);
+
+    // Print a formatted hex + ASCII dump of a sub-range [addr, addr+len).
+    void dump(uint8_t addr, uint8_t len, Print& out);
 };
 
 extern MultiduinoNVRAMClass NVRAM;
+
+// ---------------------------------------------------------------------------
+// NVRAMSlot<T>  –  typed named slot with automatic address management
+//
+// Usage:
+//   NVRAMSlot<uint32_t> counter(8);  // lives at NVRAM byte 8 (4 bytes)
+//   counter.save(42);
+//   uint32_t v = counter.load();
+// ---------------------------------------------------------------------------
+template<typename T>
+class NVRAMSlot {
+public:
+    explicit NVRAMSlot(uint8_t addr) : _addr(addr) {}
+
+    void save(const T& value) { NVRAM.put(_addr, value); }
+    T    load()               { T v; NVRAM.get(_addr, v); return v; }
+    void load(T& value)       { NVRAM.get(_addr, value); }
+
+    uint8_t addr()  const { return _addr; }
+    uint8_t size()  const { return (uint8_t)sizeof(T); }
+
+private:
+    uint8_t _addr;
+};

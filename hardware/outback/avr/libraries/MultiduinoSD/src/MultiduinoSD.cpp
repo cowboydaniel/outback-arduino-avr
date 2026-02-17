@@ -886,5 +886,95 @@ void MultiduinoSDClass::ls(const char* path, Print& out, uint8_t depth) {
     fatLsDir(dirCluster, out, depth);
 }
 
+// ---------------------------------------------------------------------------
+// SDFile::peek / readLine
+// ---------------------------------------------------------------------------
+int SDFile::peek() {
+    if (!_open || _isDir || _pos >= _size) return -1;
+    uint32_t savedPos = _pos;
+    uint8_t b;
+    int r = (MultiduinoSD._fileRead(this, &b, 1) == 1) ? (int)b : -1;
+    if (r != -1) MultiduinoSD._fileSeek(this, savedPos);
+    return r;
+}
+
+uint16_t SDFile::readLine(char* buf, uint16_t maxLen) {
+    if (!buf || maxLen == 0 || !_open || _isDir) return 0;
+    uint16_t n = 0;
+    while (n < maxLen - 1) {
+        uint8_t b;
+        if (MultiduinoSD._fileRead(this, &b, 1) != 1) break;
+        if (b == '\n') break;
+        if (b == '\r') continue;
+        buf[n++] = (char)b;
+    }
+    buf[n] = '\0';
+    return n;
+}
+
+// ---------------------------------------------------------------------------
+// begin() with card-detect pin (active-LOW)
+// ---------------------------------------------------------------------------
+bool MultiduinoSDClass::begin(uint8_t cdPin) {
+    pinMode(cdPin, INPUT_PULLUP);
+    if (digitalRead(cdPin) == HIGH) return false;
+    return begin();
+}
+
+// ---------------------------------------------------------------------------
+// freeMB – count free clusters in the FAT
+// ---------------------------------------------------------------------------
+uint32_t MultiduinoSDClass::freeMB() const {
+    if (!_mounted) return 0;
+    uint32_t free = 0;
+    MultiduinoSDClass* self = const_cast<MultiduinoSDClass*>(this);
+    for (uint32_t c = 2; c < _clusterCnt + 2; c++) {
+        uint32_t fatOffset = (_fatType == 16) ? c * 2 : c * 4;
+        uint32_t fatSector = _fat1Lba + fatOffset / 512;
+        uint16_t entOff    = (uint16_t)(fatOffset % 512);
+        if (!self->cacheSector(fatSector)) continue;
+        if (_fatType == 16) {
+            uint16_t v = (uint16_t)_cacheBuf[entOff] |
+                         ((uint16_t)_cacheBuf[entOff + 1] << 8);
+            if (v == 0) free++;
+        } else {
+            uint32_t v = (uint32_t)_cacheBuf[entOff]             |
+                         ((uint32_t)_cacheBuf[entOff + 1] << 8)  |
+                         ((uint32_t)_cacheBuf[entOff + 2] << 16) |
+                         ((uint32_t)_cacheBuf[entOff + 3] << 24);
+            if ((v & 0x0FFFFFFFUL) == 0) free++;
+        }
+    }
+    return free * _secPerClus / 2 / 1024;
+}
+
+// ---------------------------------------------------------------------------
+// volumeLabel – find the volume-label directory entry (attr 0x08)
+// ---------------------------------------------------------------------------
+void MultiduinoSDClass::volumeLabel(char* buf) {
+    buf[0] = '\0';
+    if (!_mounted) return;
+    bool fat16Root    = (_fatType == 16);
+    uint32_t startLba = fat16Root ? _rootLba : fatClusterToLba(_rootClus);
+    uint32_t totSecs  = fat16Root ? ((uint32_t)_rootEntCnt * 32 / 512) : _secPerClus;
+    for (uint32_t si = 0; si < totSecs; si++) {
+        if (!cacheSector(startLba + si)) return;
+        for (uint16_t off = 0; off < 512; off += 32) {
+            uint8_t first = _cacheBuf[off];
+            if (first == 0x00) return;
+            if (first == 0xE5) continue;
+            if (_cacheBuf[off + 11] == 0x08) {
+                uint8_t n = 0;
+                for (uint8_t i = 0; i < 11; i++) {
+                    char c = (char)_cacheBuf[off + i];
+                    if (c != ' ') buf[n++] = c;
+                }
+                buf[n] = '\0';
+                return;
+            }
+        }
+    }
+}
+
 // Global instance
 MultiduinoSDClass MultiduinoSD;
