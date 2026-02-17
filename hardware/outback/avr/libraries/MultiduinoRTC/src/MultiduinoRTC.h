@@ -17,6 +17,13 @@
 #define DS1307_REG_NVRAM 0x08 // First NVRAM byte (0x08–0x3F)
 #define DS1307_NVRAM_SIZE 56  // Bytes of battery-backed NVRAM
 
+// SQW output frequency constants (DS1307 control register values)
+#define SQW_OFF      0x00  // SQW pin held low
+#define SQW_1HZ      0x10  // 1 Hz square wave
+#define SQW_4096HZ   0x11  // 4096 Hz square wave
+#define SQW_8192HZ   0x12  // 8192 Hz square wave
+#define SQW_32768HZ  0x13  // 32768 Hz square wave
+
 // ---------------------------------------------------------------------------
 // DateTime
 // ---------------------------------------------------------------------------
@@ -43,6 +50,37 @@ struct DateTime {
         snprintf(buf, 20, "%04u-%02u-%02u %02u:%02u:%02u",
                  year, month, day, hour, minute, second);
     }
+
+    // Returns true if all fields are within valid ranges.
+    bool isValid() const;
+
+    // Returns true if this->year is a leap year.
+    bool isLeapYear() const;
+
+    // Compute and store dow from year/month/day (Tomohiko Sakamoto algorithm).
+    void computeDow();
+
+    // Convert to seconds since 2000-01-01 00:00:00 (epoch base = Y2K).
+    uint32_t toEpoch() const;
+
+    // Construct a DateTime from Y2K-epoch seconds.
+    static DateTime fromEpoch(uint32_t epoch);
+
+    // Add (or subtract) seconds in-place.  Adjusts all fields correctly.
+    void addSeconds(int32_t s);
+
+    // Return signed seconds between this and an earlier DateTime.
+    // Result is positive when this > earlier.
+    int32_t secondsSince(const DateTime& earlier) const;
+
+    // Fill h12 with the 12-hour clock value (1–12) and set pm = true for PM.
+    void toAMPM(uint8_t& h12, bool& pm) const;
+
+    // Flash-string day name ("Monday" … "Sunday").  dow must be 1–7.
+    const __FlashStringHelper* dayName() const;
+
+    // Flash-string month name ("January" … "December").  month must be 1–12.
+    const __FlashStringHelper* monthName() const;
 };
 
 // ---------------------------------------------------------------------------
@@ -67,6 +105,11 @@ public:
 
     // Write date/time to the DS1307 and start the oscillator.
     void adjust(const DateTime& dt);
+
+    // Configure the SQW/OUT pin.  freq must be one of the SQW_* constants.
+    // SQW_OFF drives the pin low; SQW_1HZ/4096HZ/8192HZ/32768HZ output a
+    // square wave at the corresponding frequency.
+    void setSqwFreq(uint8_t freq);
 
     // --------------- NVRAM (56 bytes, addresses 0–55) -----------------------
 
