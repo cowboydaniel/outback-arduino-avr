@@ -1,0 +1,38 @@
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+MultiduinoSHT4xClass	KEYWORD1
+SHT4xPrecision	KEYWORD1
+SHT4xHeater	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+begin	KEYWORD2
+read	KEYWORD2
+reset	KEYWORD2
+serialNumber	KEYWORD2
+heater	KEYWORD2
+
+#######################################
+# Instances (KEYWORD2)
+#######################################
+
+SHT4x	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+SHT4X_ADDR	LITERAL1
+SHT4X_HIGH	LITERAL1
+SHT4X_MEDIUM	LITERAL1
+SHT4X_LOW	LITERAL1
+SHT4X_HEATER_200MW_1S	LITERAL1
+SHT4X_HEATER_200MW_100MS	LITERAL1
+SHT4X_HEATER_110MW_1S	LITERAL1
+SHT4X_HEATER_110MW_100MS	LITERAL1
+SHT4X_HEATER_20MW_1S	LITERAL1
+SHT4X_HEATER_20MW_100MS	LITERAL1

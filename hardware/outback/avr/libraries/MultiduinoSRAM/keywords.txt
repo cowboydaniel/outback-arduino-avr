@@ -1,0 +1,35 @@
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+MultiduinoSRAMClass	KEYWORD1
+SRAMSlot	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+begin	KEYWORD2
+read	KEYWORD2
+write	KEYWORD2
+put	KEYWORD2
+get	KEYWORD2
+fill	KEYWORD2
+clear	KEYWORD2
+size	KEYWORD2
+dump	KEYWORD2
+readBlock	KEYWORD2
+writeBlock	KEYWORD2
+
+#######################################
+# Instances (KEYWORD2)
+#######################################
+
+SRAM	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+SRAM_CS_PIN	LITERAL1
+SRAM_SIZE	LITERAL1

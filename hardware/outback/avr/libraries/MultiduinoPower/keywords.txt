@@ -1,0 +1,26 @@
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+MultiduinoPowerClass	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+begin	KEYWORD2
+enable3V3	KEYWORD2
+disable3V3	KEYWORD2
+is3V3Enabled	KEYWORD2
+
+#######################################
+# Instances (KEYWORD2)
+#######################################
+
+MultiduinoPower	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+PIN_3V3_EN	LITERAL1

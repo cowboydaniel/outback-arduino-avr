@@ -1,0 +1,60 @@
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+MultiduinoRTCv2Class	KEYWORD1
+Alarm1Mode	KEYWORD1
+Alarm2Mode	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+begin	KEYWORD2
+now	KEYWORD2
+adjust	KEYWORD2
+isRunning	KEYWORD2
+clearOscillatorStopFlag	KEYWORD2
+temperature	KEYWORD2
+setAlarm1	KEYWORD2
+setAlarm2	KEYWORD2
+clearAlarm1	KEYWORD2
+clearAlarm2	KEYWORD2
+alarm1Fired	KEYWORD2
+alarm2Fired	KEYWORD2
+onAlarm1	KEYWORD2
+onAlarm2	KEYWORD2
+detachAlarmInterrupt	KEYWORD2
+setSqwFreq	KEYWORD2
+enable32KHz	KEYWORD2
+disable32KHz	KEYWORD2
+is32KHzEnabled	KEYWORD2
+
+#######################################
+# Instances (KEYWORD2)
+#######################################
+
+RTCv2	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+DS3231_ADDR	LITERAL1
+PIN_SQW	LITERAL1
+PIN_32KHZ	LITERAL1
+ALARM1_EVERY_SECOND	LITERAL1
+ALARM1_MATCH_SECONDS	LITERAL1
+ALARM1_MATCH_MINUTES_SECONDS	LITERAL1
+ALARM1_MATCH_HOURS_MINUTES_SECONDS	LITERAL1
+ALARM1_MATCH_DATE	LITERAL1
+ALARM1_MATCH_DAY	LITERAL1
+ALARM2_EVERY_MINUTE	LITERAL1
+ALARM2_MATCH_MINUTES	LITERAL1
+ALARM2_MATCH_HOURS_MINUTES	LITERAL1
+ALARM2_MATCH_DATE	LITERAL1
+ALARM2_MATCH_DAY	LITERAL1
+DS3231_SQW_1HZ	LITERAL1
+DS3231_SQW_1024HZ	LITERAL1
+DS3231_SQW_4096HZ	LITERAL1
+DS3231_SQW_8192HZ	LITERAL1
