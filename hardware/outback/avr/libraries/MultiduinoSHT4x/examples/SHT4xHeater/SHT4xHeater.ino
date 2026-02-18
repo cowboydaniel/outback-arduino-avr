@@ -9,7 +9,7 @@
  *
  * Multiduino v2 only.
  */
-#ifndef ARDUINO_MULTIDUINO_V2
+#ifndef ARDUINO_AVR_MULTIDUINO_V2
 #error "This example is for Multiduino v2 only — select \'Multiduino v2\' from the Boards menu."
 #endif
 

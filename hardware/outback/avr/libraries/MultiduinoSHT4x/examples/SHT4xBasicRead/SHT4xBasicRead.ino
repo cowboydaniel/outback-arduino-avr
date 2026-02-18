@@ -8,7 +8,7 @@
  * Remember: MultiduinoPower.begin() must be called before SHT4x.begin()
  * because the SHT4x is on the 3.3V rail.
  */
-#ifndef ARDUINO_MULTIDUINO_V2
+#ifndef ARDUINO_AVR_MULTIDUINO_V2
 #error "This example is for Multiduino v2 only — select \'Multiduino v2\' from the Boards menu."
 #endif
 
