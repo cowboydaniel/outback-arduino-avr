@@ -121,17 +121,41 @@ void MultiduinoRTCClass::writeNVRAM(uint8_t addr, const uint8_t* buf, uint8_t le
     if (addr >= DS1307_NVRAM_SIZE) return;
     if (addr + len > DS1307_NVRAM_SIZE) len = DS1307_NVRAM_SIZE - addr;
 
-    Wire.beginTransmission(DS1307_ADDR);
-    Wire.write(DS1307_REG_NVRAM + addr);
-    for (uint8_t i = 0; i < len; i++) Wire.write(buf[i]);
-    Wire.endTransmission();
+    // AVR Wire buffer is 32 bytes; 1 byte is consumed by the register address,
+    // leaving 31 bytes of payload per transaction.
+    const uint8_t maxDataPerTx = 31;
+    uint8_t offset = 0;
+
+    while (offset < len) {
+        uint8_t chunk = len - offset;
+        if (chunk > maxDataPerTx) chunk = maxDataPerTx;
+
+        Wire.beginTransmission(DS1307_ADDR);
+        Wire.write((uint8_t)(DS1307_REG_NVRAM + addr + offset));
+        for (uint8_t i = 0; i < chunk; i++) Wire.write(buf[offset + i]);
+        Wire.endTransmission();
+
+        offset += chunk;
+    }
 }
 
 void MultiduinoRTCClass::clearNVRAM() {
-    Wire.beginTransmission(DS1307_ADDR);
-    Wire.write(DS1307_REG_NVRAM);
-    for (uint8_t i = 0; i < DS1307_NVRAM_SIZE; i++) Wire.write(0x00);
-    Wire.endTransmission();
+    // AVR Wire buffer is 32 bytes; 1 byte is consumed by the register address,
+    // leaving 31 bytes of payload per transaction.
+    const uint8_t maxDataPerTx = 31;
+    uint8_t offset = 0;
+
+    while (offset < DS1307_NVRAM_SIZE) {
+        uint8_t chunk = DS1307_NVRAM_SIZE - offset;
+        if (chunk > maxDataPerTx) chunk = maxDataPerTx;
+
+        Wire.beginTransmission(DS1307_ADDR);
+        Wire.write((uint8_t)(DS1307_REG_NVRAM + offset));
+        for (uint8_t i = 0; i < chunk; i++) Wire.write((uint8_t)0x00);
+        Wire.endTransmission();
+
+        offset += chunk;
+    }
 }
 
 // ---------------------------------------------------------------------------
