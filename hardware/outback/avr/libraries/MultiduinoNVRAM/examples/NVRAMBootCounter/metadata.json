@@ -1,0 +1,7 @@
+{
+  "cpu": [
+    {
+      "fqbn": "outback:avr:multiduino"
+    }
+  ]
+}
