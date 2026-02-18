@@ -16,8 +16,8 @@
           "category": "Contributed",
           "url": "https://raw.githubusercontent.com/cowboydaniel/outback-arduino-avr/main/outback-avr-1.3.0.tar.gz",
           "archiveFileName": "outback-avr-1.3.0.tar.gz",
-          "checksum": "SHA-256:3d66dea486611b428afbdc47d8caf1409bbf5314fc4086e9939b1adf8890e10c",
-          "size": "80684",
+          "checksum": "SHA-256:74c21d71f9df9cdc004c61ebbe3d7bfa06b0a325d45325249ab22bd4b5a78de2",
+          "size": "79726",
           "boards": [
             { "name": "Multiduino" },
             { "name": "Multiduino v2" }
