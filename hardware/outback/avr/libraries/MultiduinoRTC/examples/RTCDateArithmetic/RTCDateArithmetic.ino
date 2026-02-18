@@ -4,8 +4,12 @@
   Demonstrates addSeconds() and secondsSince() on the DateTime struct.
 
   On boot the current RTC time is captured as a reference.  Every 10 seconds:
-    - addSeconds() advances a copy of that reference by a growing offset.
-    - secondsSince() measures how far the current time is from the reference.
+    - addSeconds() advances a copy of that reference by a growing offset and
+      prints the resulting future timestamp.
+    - secondsSince() is called on that future DateTime (not on the live clock)
+      to confirm it reports exactly the offset back – proving the two functions
+      are inverses of each other.
+    - The live wall-clock seconds elapsed since boot are shown separately.
 
   Hardware: Multiduino with DS1307 RTC.
   Open Serial Monitor at 115200 baud.
@@ -37,14 +41,19 @@ void loop() {
     DateTime future = g_ref;
     future.addSeconds(g_addOffset);
 
+    // secondsSince() on the computed future proves it round-trips correctly.
+    int32_t roundTrip = future.secondsSince(g_ref);
+
+    // Separately measure real wall-clock seconds using the live RTC reading.
     DateTime now = MultiduinoRTC.now();
-    int32_t elapsed = now.secondsSince(g_ref);
+    int32_t wallElapsed = now.secondsSince(g_ref);
 
     char buf[20];
-    Serial.print(F("Offset +"));  Serial.print(g_addOffset); Serial.println(F("s:"));
+    Serial.print(F("Offset +"));  Serial.print(g_addOffset); Serial.println(F(" s:"));
     future.toString(buf);
-    Serial.print(F("  Future  : ")); Serial.println(buf);
-    Serial.print(F("  Elapsed : ")); Serial.print(elapsed); Serial.println(F(" s since reference"));
+    Serial.print(F("  Future           : ")); Serial.println(buf);
+    Serial.print(F("  future-ref (s)   : ")); Serial.println(roundTrip);
+    Serial.print(F("  Wall elapsed (s) : ")); Serial.println(wallElapsed);
     Serial.println();
     delay(10000);
 }

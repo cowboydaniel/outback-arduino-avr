@@ -121,8 +121,13 @@ void loop() {
                 Serial.println(buf);
             }
         } else if (alarmArmed) {
-            // Check if it is alarm time
-            if (dt.hour == alarmH && dt.minute == alarmM && dt.second == alarmS) {
+            // Check if it is alarm time.
+            // Use >= on total seconds so millis() drift cannot cause the poll
+            // to skip the exact target second and miss the alarm entirely.
+            uint32_t alarmSecs = (uint32_t)alarmH * 3600 + alarmM * 60 + alarmS;
+            uint32_t nowSecs   = (uint32_t)dt.hour  * 3600
+                                + (uint32_t)dt.minute * 60 + dt.second;
+            if (nowSecs >= alarmSecs) {
                 alarmRinging  = true;
                 alarmStartMs  = now;
                 Serial.println(F("*** ALARM FIRED! ***"));

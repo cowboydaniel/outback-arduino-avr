@@ -35,18 +35,27 @@
 #define DS1307_CTRL_RS1   0x02   // Rate Select bit 1
 #define DS1307_CTRL_OUT   0x80   // Output level when SQWE=0
 
+// F() is a statement-expression and cannot be used in a file-scope initialiser.
+// Declare each label as a named PROGMEM array and reference it via PGM_P instead.
+static const char kSqwLabel0[] PROGMEM = "1 Hz      ";
+static const char kSqwLabel1[] PROGMEM = "4096 Hz   ";
+static const char kSqwLabel2[] PROGMEM = "8192 Hz   ";
+static const char kSqwLabel3[] PROGMEM = "32768 Hz  ";
+static const char kSqwLabel4[] PROGMEM = "OFF (LOW) ";
+static const char kSqwLabel5[] PROGMEM = "OFF (HIGH)";
+
 struct SqwMode {
-    const __FlashStringHelper* label;
+    PGM_P   label;     // pointer to a PROGMEM string
     uint8_t ctrlByte;
 };
 
 static const SqwMode kModes[] = {
-    { F("1 Hz      "), DS1307_CTRL_SQWE | 0x00 },
-    { F("4096 Hz   "), DS1307_CTRL_SQWE | DS1307_CTRL_RS0 },
-    { F("8192 Hz   "), DS1307_CTRL_SQWE | DS1307_CTRL_RS1 },
-    { F("32768 Hz  "), DS1307_CTRL_SQWE | DS1307_CTRL_RS1 | DS1307_CTRL_RS0 },
-    { F("OFF (LOW) "), 0x00 },
-    { F("OFF (HIGH)"), DS1307_CTRL_OUT },
+    { kSqwLabel0, DS1307_CTRL_SQWE | 0x00 },
+    { kSqwLabel1, DS1307_CTRL_SQWE | DS1307_CTRL_RS0 },
+    { kSqwLabel2, DS1307_CTRL_SQWE | DS1307_CTRL_RS1 },
+    { kSqwLabel3, DS1307_CTRL_SQWE | DS1307_CTRL_RS1 | DS1307_CTRL_RS0 },
+    { kSqwLabel4, 0x00 },
+    { kSqwLabel5, DS1307_CTRL_OUT },
 };
 
 uint8_t  modeIndex  = 0;
@@ -55,10 +64,9 @@ uint32_t lastPrint  = 0;
 #define  MODE_DURATION_MS  3000UL
 
 void applyMode(uint8_t idx) {
-    // Write directly to the DS1307 control register via the NVRAM-adjacent reg
+    // Write directly to the DS1307 control register via the NVRAM-adjacent reg.
     // The control register is at address 0x07, right before NVRAM (0x08).
-    // We use a raw Wire write since MultiduinoRTC does not expose the ctrl reg.
-    #include <Wire.h>
+    // Wire is already initialised by MultiduinoRTC.begin().
     Wire.beginTransmission(0x68);
     Wire.write(DS1307_CTRL_REG);
     Wire.write(kModes[idx].ctrlByte);
@@ -108,7 +116,7 @@ void loop() {
         dt.toString(buf);
         Serial.print(buf);
         Serial.print(F("  SQW: "));
-        Serial.println(kModes[modeIndex].label);
+        Serial.println((const __FlashStringHelper*)kModes[modeIndex].label);
     }
 
     // Advance to next mode every 3 seconds
@@ -117,6 +125,6 @@ void loop() {
         modeIndex = (modeIndex + 1) % (sizeof(kModes) / sizeof(kModes[0]));
         applyMode(modeIndex);
         Serial.print(F(">> Mode changed to: "));
-        Serial.println(kModes[modeIndex].label);
+        Serial.println((const __FlashStringHelper*)kModes[modeIndex].label);
     }
 }
