@@ -14,6 +14,10 @@
   Hardware: Multiduino with DS1307 RTC.
   Open Serial Monitor at 115200 baud.  Press any key to log an event.
 */
+#ifndef ARDUINO_AVR_MULTIDUINO
+#error "This example is for Multiduino only — select \'Multiduino\' from the Boards menu."
+#endif
+
 
 #include <MultiduinoRTC.h>
 #include <MultiduinoNVRAM.h>

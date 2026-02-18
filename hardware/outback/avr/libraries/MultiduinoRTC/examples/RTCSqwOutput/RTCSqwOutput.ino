@@ -25,6 +25,10 @@
            SQW/OUT on DS1307 pin 7 (not broken out on all boards –
            check your Multiduino schematic).
 */
+#ifndef ARDUINO_AVR_MULTIDUINO
+#error "This example is for Multiduino only — select \'Multiduino\' from the Boards menu."
+#endif
+
 
 #include <MultiduinoRTC.h>
 
