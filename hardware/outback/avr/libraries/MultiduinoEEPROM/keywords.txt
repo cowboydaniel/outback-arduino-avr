@@ -1,0 +1,41 @@
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+MultiduinoEEPROMClass	KEYWORD1
+EEPROMSlot	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+begin	KEYWORD2
+read	KEYWORD2
+write	KEYWORD2
+put	KEYWORD2
+get	KEYWORD2
+readBlock	KEYWORD2
+writeBlock	KEYWORD2
+writePage	KEYWORD2
+fill	KEYWORD2
+clear	KEYWORD2
+size	KEYWORD2
+readSerialNumber	KEYWORD2
+printSerialNumber	KEYWORD2
+dump	KEYWORD2
+
+#######################################
+# Instances (KEYWORD2)
+#######################################
+
+ExtEEPROM	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+EEPROM_ADDR	LITERAL1
+EEPROM_SERIAL_ADDR	LITERAL1
+EEPROM_SIZE	LITERAL1
+EEPROM_PAGE_SIZE	LITERAL1
+EEPROM_WRITE_DELAY_MS	LITERAL1
