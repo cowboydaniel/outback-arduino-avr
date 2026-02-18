@@ -255,8 +255,12 @@ bool MultiduinoSDClass::fatMount() {
     _rootLba  = _fat1Lba + (uint32_t)_numFATs * _FATSz;
     _dataLba  = _rootLba + rootDirSectors;
 
+    // _totalSec32 and all offsets are partition-relative; bpbLba is an
+    // absolute LBA and must NOT appear in this formula.  Including it caused
+    // dataSec to underflow on any card with an MBR partition table, making
+    // _clusterCnt collapse to < 4085 and fatMount() report FAT12 / fail.
     uint32_t dataSec = _totalSec32 -
-        (uint32_t)(bpbLba + _resSectors + (uint32_t)_numFATs * _FATSz + rootDirSectors);
+        (_resSectors + (uint32_t)_numFATs * _FATSz + rootDirSectors);
     _clusterCnt = dataSec / _secPerClus;
 
     if      (_clusterCnt < 4085)  return false;  // FAT12 not supported
