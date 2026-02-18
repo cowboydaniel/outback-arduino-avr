@@ -18,3 +18,33 @@ multiduino.build.board=AVR_MULTIDUINO
 multiduino.build.core=arduino:arduino
 multiduino.build.variant=multiduino
 multiduino.build.extra_flags=
+
+##############################################################
+# Multiduino v2
+# Outback Electronics
+# https://github.com/cowboydaniel/Multiduino-v2
+##############################################################
+
+multiduino_v2.name=Multiduino v2
+
+multiduino_v2.upload.tool=avrdude
+multiduino_v2.upload.tool.default=avrdude
+multiduino_v2.upload.protocol=arduino
+multiduino_v2.upload.maximum_size=32256
+multiduino_v2.upload.maximum_data_size=2048
+multiduino_v2.upload.speed=115200
+
+multiduino_v2.bootloader.tool=avrdude
+multiduino_v2.bootloader.tool.default=avrdude
+multiduino_v2.bootloader.low_fuses=0xFF
+multiduino_v2.bootloader.high_fuses=0xDE
+multiduino_v2.bootloader.extended_fuses=0xFD
+multiduino_v2.bootloader.unlock_bits=0x3F
+multiduino_v2.bootloader.lock_bits=0x0F
+multiduino_v2.bootloader.file=optiboot/optiboot_atmega328pb.hex
+
+multiduino_v2.build.mcu=atmega328pb
+multiduino_v2.build.f_cpu=16000000L
+multiduino_v2.build.board=MULTIDUINO_V2
+multiduino_v2.build.core=arduino
+multiduino_v2.build.variant=multiduino_v2
