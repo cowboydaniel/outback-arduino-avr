@@ -46,5 +46,5 @@ multiduino_v2.bootloader.file=optiboot/optiboot_atmega328pb.hex
 multiduino_v2.build.mcu=atmega328pb
 multiduino_v2.build.f_cpu=16000000L
 multiduino_v2.build.board=MULTIDUINO_V2
-multiduino_v2.build.core=arduino
+multiduino_v2.build.core=arduino:arduino
 multiduino_v2.build.variant=multiduino_v2
