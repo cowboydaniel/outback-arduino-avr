@@ -64,15 +64,19 @@ DateTime MultiduinoRTCClass::now() {
 }
 
 void MultiduinoRTCClass::adjust(const DateTime& dt) {
+    // Always recompute dow from the calendar date so callers that omit it
+    // (or pass the default dow=1) still get the correct DS1307 register value.
+    DateTime tmp = dt;
+    tmp.computeDow();
     Wire.beginTransmission(DS1307_ADDR);
     Wire.write(DS1307_REG_SEC);
-    Wire.write(decToBcd(dt.second) & 0x7F);
-    Wire.write(decToBcd(dt.minute));
-    Wire.write(decToBcd(dt.hour));
-    Wire.write(dt.dow);
-    Wire.write(decToBcd(dt.day));
-    Wire.write(decToBcd(dt.month));
-    Wire.write(decToBcd((uint8_t)(dt.year - 2000)));
+    Wire.write(decToBcd(tmp.second) & 0x7F);
+    Wire.write(decToBcd(tmp.minute));
+    Wire.write(decToBcd(tmp.hour));
+    Wire.write(tmp.dow);
+    Wire.write(decToBcd(tmp.day));
+    Wire.write(decToBcd(tmp.month));
+    Wire.write(decToBcd((uint8_t)(tmp.year - 2000)));
     Wire.endTransmission();
 }
 
